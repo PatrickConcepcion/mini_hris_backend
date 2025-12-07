@@ -110,13 +110,13 @@ API requests → Controllers (with Form Request validation) → Eloquent Models 
 ## Coding Principles
 
 - **SOLID & DRY**
-  - Always follow SOLID:
-    - **S**ingle Responsibility
-    - **O**pen-Closed
-    - **L**iskov Substitution
-    - **I**nterface Segregation
-    - **D**ependency Inversion
-  - Avoid duplication; extract reusable logic into services, actions, or helpers.
+  - Always follow SOLID principles to maintain clean, maintainable code:
+    - **S**ingle Responsibility: Each class/method should have one clear purpose. A controller shouldn't handle both validation and business logic.
+    - **O**pen-Closed: Code should be extensible without modification. Use interfaces and inheritance to add new functionality.
+    - **L**iskov Substitution: Subtypes must be substitutable for base types. Child classes should behave like their parents.
+    - **I**nterface Segregation: Prefer small, focused interfaces over large, general-purpose ones.
+    - **D**ependency Inversion: Depend on abstractions, not concretions. Use interfaces in constructor injection.
+  - **DRY (Don't Repeat Yourself)**: Avoid duplication; extract reusable logic into services, actions, or helpers. If you find yourself copying code, refactor it into a shared component.
 
 - **Imports**
   - Prefer using `use` statements at the top:
@@ -124,8 +124,10 @@ API requests → Controllers (with Form Request validation) → Eloquent Models 
     - ❌ `\App\Models\Employee::` scattered inline.
 
 - **Services & Dependency Injection**
-  - If logic is or will be reused, move it into:
-    - `app/Services/` (e.g., `EmployeeService`)
+  - **Business Logic**: Belongs in Controllers - keep controllers focused on orchestrating business logic
+  - **Repeated Business Logic and Reusable Logic**: Move to Services in `app/Services/` (e.g., `EmployeeService`)
+  - **Cross-Controller Reuse**: If logic is being repeated across multiple controllers, extract it to a service so other controllers can use it
+  - **Same-Controller Reuse**: If repeated only within the same controller, move to its own private method within the controller to maintain readability and adhere to DRY principle
   - Inject services into controllers via constructor injection, not via facades or static calls where DI is more appropriate.
 
 - **Graceful Failure**
@@ -308,8 +310,10 @@ API requests → Controllers (with Form Request validation) → Eloquent Models 
     - Require a data migration
 
 - **Follow Coding Standards**
-  - Always follow industry best practices.
-  - Follow this project’s established style and patterns unless they clearly conflict with best practices; if they do, explain the concern.
+  - Always follow the coding conventions being implemented in this project unless they constitute bad practices.
+  - When encountering potentially harmful patterns, refer to industry standards and politely point out bad practices by the user.
+  - Prioritize industry best practices over project-specific conventions when they conflict.
+  - Follow this project's established style and patterns unless they clearly conflict with best practices; if they do, explain the concern.
   - **Ensure UUID Usage**: All new models must use UUIDs via the `HasUuids` trait instead of auto-incrementing integers.
 
 - **Explain Implementations Clearly**
