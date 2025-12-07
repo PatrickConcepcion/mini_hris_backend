@@ -14,6 +14,19 @@ API requests → Controllers (with Form Request validation) → Eloquent Models 
 
 ---
 
+## Multi-AI Tool Support
+
+This repository includes instructions for multiple AI coding assistants to ensure consistency across different tools:
+
+- **GitHub Copilot**: Uses this file (`.github/copilot-instructions.md`)
+
+**To ensure all AI assistants follow the same standards:**
+1. Keep all instruction files synchronized when making changes
+2. Use `.github/ai-instructions.md` as the single source of truth
+3. Update tool-specific files when project conventions change
+
+---
+
 ## Critical Workflows
 
 - **Setup**
@@ -227,6 +240,8 @@ API requests → Controllers (with Form Request validation) → Eloquent Models 
 - **JWT Handling**
   - Respect token TTL and refresh behavior.
   - Logout/refresh flows should invalidate or rotate tokens properly if configured to do so.
+  - **Token Rotation**: Every authenticated API request rotates the JWT token (new token with same expiry returned in `Authorization` header).
+  - Frontend must extract and use the rotated token from response headers for subsequent requests.
   - Never expose raw JWT tokens in logs or error messages.
 
 ---
@@ -319,6 +334,16 @@ API requests → Controllers (with Form Request validation) → Eloquent Models 
       - What changed
       - Why it changed
       - How it affects performance, maintainability, or security
+
+- **Investigation & Planning**
+  - When asked about major plans or feature implementation status, conduct thorough investigation across both frontend and backend
+  - Navigate through the codebase systematically: check routes, controllers, models, components, pages, and database schemas
+  - Provide comprehensive analysis with specific file references and implementation details
+  - Identify gaps, existing implementations, and integration points between frontend and backend
+  - Suggest implementation approaches based on current architecture
+  - Explain code logic, workflows, and data flow thoroughly with clear examples
+  - Be prepared to answer follow-up questions about any aspect of the investigation
+  - Reference actual code snippets when explaining implementations
 
 ---
 
