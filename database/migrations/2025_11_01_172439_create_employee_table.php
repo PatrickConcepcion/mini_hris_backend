@@ -41,6 +41,11 @@ return new class extends Migration
             
             $table->timestamps();
         });
+
+        // Add foreign key constraint for users.employee_id
+        Schema::table('users', function (Blueprint $table) {
+            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
+        });
     }
 
     /**
@@ -48,6 +53,11 @@ return new class extends Migration
      */
     public function down(): void
     {
+        // Remove foreign key constraint before dropping table
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropForeign(['employee_id']);
+        });
+
         Schema::dropIfExists('employees');
     }
 };

@@ -1,52 +1,146 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Mini HRIS Backend
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel 12-based mini Human Resource Information System (HRIS) backend focused on employee data management with JWT authentication and RESTful API design.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **JWT Authentication**: Secure API authentication with automatic token rotation
+- **Employee Management**: Full CRUD operations for employee records
+- **Search & Filtering**: Advanced search and filtering capabilities
+- **RESTful API**: Versioned API endpoints (`/api/v1/`)
+- **Security**: Enhanced security with JWT token rotation on every request
+- **Logging**: Comprehensive logging for all operations
+- **Testing**: PHPUnit test suite with feature and unit tests
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Security Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### JWT Token Rotation
+This application implements automatic JWT token rotation for enhanced security:
+- New token generated on every authenticated request
+- Same expiry time maintained to prevent premature logouts
+- Prevents token replay attacks
+- Frontend must extract rotated tokens from response headers
 
-## Learning Laravel
+## Quick Start
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### Prerequisites
+- PHP 8.2+
+- Composer
+- Node.js & npm (for frontend assets)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Installation
 
-## Laravel Sponsors
+1. **Clone and setup**:
+   ```bash
+   git clone <repository-url>
+   cd mini_hris
+   composer run setup
+   ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+2. **Environment configuration**:
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   # Configure your database and JWT_SECRET in .env
+   ```
 
-### Premium Partners
+3. **Run migrations**:
+   ```bash
+   php artisan migrate
+   ```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### Development
+
+Start the development environment:
+```bash
+composer run dev
+```
+
+This runs:
+- Laravel server (`php artisan serve`)
+- Queue worker (`php artisan queue:listen`)
+- Log monitoring (`php artisan pail`)
+- Vite dev server for frontend assets
+
+### Testing
+
+Run the test suite:
+```bash
+php artisan test
+```
+
+## API Documentation
+
+### Authentication Endpoints
+- `POST /api/v1/auth/login` - User login
+- `POST /api/v1/auth/refresh` - Refresh JWT token
+- `POST /api/v1/auth/logout` - User logout
+
+### Employee Endpoints
+- `GET /api/v1/employees` - List employees (with search/filter)
+- `POST /api/v1/employees` - Create employee
+- `GET /api/v1/employees/{id}` - Get employee details
+- `PUT /api/v1/employees/{id}` - Update employee
+- `DELETE /api/v1/employees/{id}` - Delete employee
+
+### Query Parameters
+- `?search=` - Search by name, email, or employee number
+- `?gender=` - Filter by gender
+- `?page=` - Pagination page
+- `?per_page=` - Items per page
+
+## Project Structure
+
+```
+app/
+├── Http/
+│   ├── Controllers/Api/V1/          # API controllers
+│   ├── Middleware/                  # Custom middleware (RotateToken)
+│   └── Requests/                    # Form request validation
+├── Models/                          # Eloquent models
+└── Services/                        # Business logic services
+
+database/
+├── factories/                       # Model factories
+├── migrations/                      # Database migrations
+└── seeders/                         # Database seeders
+
+routes/
+└── api.php                          # API route definitions
+
+tests/
+├── Feature/Api/V1/                  # Feature tests
+└── Unit/                           # Unit tests
+```
+
+## Key Technologies
+
+- **Laravel 12**: PHP framework
+- **JWT Auth**: PHPOpenSourceSaver/JWTAuth for authentication
+- **Eloquent ORM**: Database interactions with UUID primary keys
+- **PHPUnit**: Testing framework
+- **Vite**: Frontend asset compilation
+- **Tailwind CSS**: Utility-first CSS framework (frontend)
+
+## Development Guidelines
+
+- Follow PSR-12 coding standards
+- Use Form Request classes for validation
+- Implement business logic in Services/Actions
+- Write tests for new features
+- Use UUIDs for all model primary keys
+- Log all important operations
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+1. Follow the established coding standards
+2. Write tests for new features
+3. Update documentation as needed
+4. Ensure all tests pass before submitting
 
-## Code of Conduct
+## License
+
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
 In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
